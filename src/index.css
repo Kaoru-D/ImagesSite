@@ -61,9 +61,29 @@ html {
   --shadow-4: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   /* dark mode setup */
+  --dark-mode-text-color: var(--grey-900);
+  --dark-mode-bg-color: var(--grey-50);
+  --backgroundColor: var(--dark-mode-bg-color);
+  --textColor: var(--dark-mode-bg-color);
+  --darkModeTransition: background-color 0.3s ease-in-out;
+  background-color: 0.3s ease-in-out;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --backgroundColor: var(--dark-mode-text-color);
+    --textColor: var(--dark-mode-bg-color);
+  }
 }
 
+.dark-theme {
+  --backgroundColor: var(--dark-mode-bg-color);
+  --textColor: var(--dark-mode-text-color);
+}
 body {
+  background: var(--backgroundColor);
+  color: var(--textColor);
+  transition: var(--darkModeTransition);
+  font-family: var(--bodyFont);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 400;
