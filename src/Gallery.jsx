@@ -1,15 +1,14 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-
-const url = 'https://api.unsplash.com/search/photos?client_id=eNwmk96QxnQK5_ZBOB59gl2usGWRr0uc_7rUKjuECJQ&query=dogs';
+import { useGlobalContext } from './context';
 
 const Gallery = () => {
-
+  const { searchTerm } = useGlobalContext();
   const { data, isLoading, error } = useQuery({
-    queryKey: ['images'],
+    queryKey: ['images', searchTerm],
     queryFn: async () => {
-      const response = await axios.get(url);
+      const response = await axios.get(`https://api.unsplash.com/search/photos?client_id=eNwmk96QxnQK5_ZBOB59gl2usGWRr0uc_7rUKjuECJQ&query=${searchTerm}`);
       return response.data;
     }
   });

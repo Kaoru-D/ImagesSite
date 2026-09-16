@@ -4,6 +4,7 @@ const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('animal');
     const toggleDarkTheme = () => {
         setIsDarkTheme(!isDarkTheme);
         const body = document.querySelector('body');
@@ -31,7 +32,7 @@ export const AppProvider = ({children}) => {
         setIsModalOpen(false);
     }
     return (
-        <AppContext.Provider value={{ isDarkTheme, toggleDarkTheme, isSidebarOpen, isModalOpen, openSidebar, closeSidebar, openModal, closeModal}}>
+        <AppContext.Provider value={{ isDarkTheme, toggleDarkTheme, isSidebarOpen, isModalOpen, openSidebar, closeSidebar, openModal, closeModal , searchTerm, setSearchTerm }}>
             {children}
         </AppContext.Provider>
     )
