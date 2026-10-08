@@ -1,16 +1,16 @@
-import {createContext, useContext, useState, useEffect} from "react";
+import {createContext, useCallback, useContext, useState, useMemo} from "react";
 
 const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [searchTerm, setSearchTerm] = useState('animal');
-    const toggleDarkTheme = () => {
+    const toggleDarkTheme = useCallback(() => {
         setIsDarkTheme(!isDarkTheme);
         const body = document.querySelector('body');
         body.classList.toggle('dark-theme', isDarkTheme);
-    }
-    useEffect(() => {
+    }, [isDarkTheme]);
+    useMemo(() => {
         if(isDarkTheme){
             document.body.classList.add('dark-theme');
         } else {
@@ -19,20 +19,32 @@ export const AppProvider = ({children}) => {
     }, [isDarkTheme]);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openSidebar = () => {
+    const openSidebar = useCallback(() => {
         setIsSidebarOpen(true);
-    }
-    const closeSidebar = () => {
+    }, []);
+    const closeSidebar = useCallback(() => {
         setIsSidebarOpen(false);
-    }
-    const openModal = () => {
+    }, []);
+    const openModal = useCallback(() => {
         setIsModalOpen(true);
-    }
-    const closeModal = () => {
+    }, []);
+    const closeModal = useCallback(() => {
         setIsModalOpen(false);
-    }
+    }, []);
+    const contextValue = useMemo(() => ({
+        isDarkTheme,
+        toggleDarkTheme,
+        isSidebarOpen,
+        isModalOpen,
+        openSidebar,
+        closeSidebar,
+        openModal,
+        closeModal,
+        searchTerm,
+        setSearchTerm
+    }), [isDarkTheme, toggleDarkTheme, isSidebarOpen, isModalOpen, openSidebar, closeSidebar, openModal, closeModal, searchTerm]);
     return (
-        <AppContext.Provider value={{ isDarkTheme, toggleDarkTheme, isSidebarOpen, isModalOpen, openSidebar, closeSidebar, openModal, closeModal , searchTerm, setSearchTerm }}>
+        <AppContext.Provider value={contextValue}>
             {children}
         </AppContext.Provider>
     )
