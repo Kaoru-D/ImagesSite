@@ -1,27 +1,24 @@
-import {createContext, useCallback, useContext, useState, useMemo} from "react";
+import {createContext, useCallback, useContext, useState, useMemo, useEffect} from "react";
 
 const AppContext = createContext();
 
 const getInitialDarkMode = () => {
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const storedDarkMode = localStorage.getItem('darkTheme') === 'true';
-    return storedDarkMode || prefersDarkMode;
+    const storedDarkMode = localStorage.getItem('darkTheme');
+    if (storeDarkMode === null) return prefersDarkMode;
+    return storedDarkMode === 'true';
 };
 
 export const AppProvider = ({children}) => {
     const [isDarkTheme, setIsDarkTheme] = useState(getInitialDarkMode());
     const [searchTerm, setSearchTerm] = useState('animal');
     const toggleDarkTheme = useCallback(() => {
-        setIsDarkTheme(!isDarkTheme);
-        const body = document.querySelector('body');
-        body.classList.toggle('dark-theme', isDarkTheme);
+        const newDarkTheme = !isDarkTheme;
+        setIsDarkTheme(newDarkTheme);
+        localStorage.setItem('darkTheme', newDarkTheme);
     }, [isDarkTheme]);
-    useMemo(() => {
-        if(isDarkTheme){
-            document.body.classList.add('dark-theme');
-        } else {
-            document.body.classList.remove('dark-theme');
-        }
+    useEffect(() => {
+        document.body.classList.toggle('dark-theme', isDarkTheme);
     }, [isDarkTheme]);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
